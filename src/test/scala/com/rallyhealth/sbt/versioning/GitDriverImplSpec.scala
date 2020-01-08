@@ -31,7 +31,7 @@ class GitDriverImplSpec extends FunSpec {
     it("branchState") {
       // did it do something? I don't care what it did really, as long as it didn't throw
       val driver = new GitDriverImpl(workingDir)
-      val branchState = driver.branchState
+      val branchState = driver.branchState(true)
       // I need to do something or the compiler could eliminate the call
       assert(branchState === branchState)
     }
@@ -405,7 +405,10 @@ object GitDriverImplSpec {
 
   case class MockDriver(branchState: GitBranchState, workingState: GitWorkingState) extends GitDriver {
 
-    override def getCommitCount(hash: Option[String]): Int = throw new UnsupportedOperationException
+    override def getCommitCount(hash: Option[String], firstParent: Boolean = true): Int = throw new UnsupportedOperationException
+
+    /** Used to find the previous version and to check whether the HEAD and version commit are the same   */
+    override def branchState(firstParent: Boolean): GitBranchState = ???
   }
 
 }

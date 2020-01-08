@@ -9,14 +9,14 @@ object SemVerTasks {
 
   private val noViolationsSuffix = "-- nothing to compare for SemVer violations"
 
-  def prevRelease: Def.Initialize[Task[Option[ReleaseVersion]]] = Def.task[Option[ReleaseVersion]] {
+  def prevRelease(firstParent: Boolean = false): Def.Initialize[Task[Option[ReleaseVersion]]] = Def.task[Option[ReleaseVersion]] {
     val logger: sbt.Logger = streams.value.log
     val git = gitDriver.value
     val SemVerPrefix = "[SemVer]"
     val typePrefix = s"$SemVerPrefix Check type:"
     val abortPrefix = s"$SemVerPrefix Check aborted:"
 
-    git.branchState match {
+    git.branchState(firstParent) match {
       case GitBranchStateTwoReleases(_, headVersion, _, prevVersion) =>
         if (git.workingState.isDirty) {
           logger.debug(s"$typePrefix comparing most recent release with post-tag changes")

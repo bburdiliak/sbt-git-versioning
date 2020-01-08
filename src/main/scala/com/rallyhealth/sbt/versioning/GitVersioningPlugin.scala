@@ -91,6 +91,9 @@ object GitVersioningPlugin extends AutoPlugin {
     lazy val ignoreDirty: SettingKey[Boolean] = settingKey[Boolean](
       "Forces clean builds, i.e. doesn't add '-dirty' to the version.")
 
+    lazy val firstParent: SettingKey[Boolean] = settingKey[Boolean](
+      "Uses firstParent flag for calculating current version.")
+
     lazy val printVersion: TaskKey[Unit] = taskKey[Unit](
       "Prints the version that would be applied to this sbt project")
 
@@ -151,7 +154,7 @@ object GitVersioningPlugin extends AutoPlugin {
     versionFromGit := {
       // This depends on but does not use [[autoFetchResult]]; that ensures the task is run but ignores the result.
       (autoFetchResult in ThisProject).value
-      val gitVersion = gitDriver.value.calcCurrentVersion(ignoreDirty.value)
+      val gitVersion = gitDriver.value.calcCurrentVersion(ignoreDirty.value, firstParent.value)
 
       ConsoleLogger().info(s"GitVersioningPlugin set versionFromGit=$gitVersion")
 
@@ -207,7 +210,7 @@ object GitVersioningPlugin extends AutoPlugin {
           .foldLeft(ver)(_.release(_))
 
         val applySnapshotLowerBound: VersionTransform = ver => gitVersioningSnapshotLowerBound.value
-          .foldLeft(ver)(_.lowerBound(_, gitDriver.value.branchState))
+          .foldLeft(ver)(_.lowerBound(_, gitDriver.value.branchState()))
 
         val applyAllTransforms = applyMajorMinorPatchRelease andThen applySnapshotLowerBound
         applyAllTransforms(versionFromGit.value)
