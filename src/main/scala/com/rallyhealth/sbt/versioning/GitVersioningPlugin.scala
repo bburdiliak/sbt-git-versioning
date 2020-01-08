@@ -182,6 +182,8 @@ object GitVersioningPlugin extends AutoPlugin {
 
     ignoreDirty := false,
 
+    firstParent := false,
+
     version := {
       import SemVerReleaseType._
       val log = ConsoleLogger() // A setting cannot depend on a task (like streams.value)

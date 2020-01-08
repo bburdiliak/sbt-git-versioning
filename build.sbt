@@ -1,16 +1,23 @@
 import sbt.plugins.SbtPlugin
 
+resolvers in Global += Resolver.url("upstartcommerce", url("https://upstartcommerce.bintray.com/nochannel"))(Resolver.ivyStylePatterns)
+
 name := "sbt-git-versioning"
-organizationName := "Rally Health"
-organization := "com.rallyhealth.sbt"
+//organizationName := "Rally Health"
+//organization := "com.rallyhealth.sbt"
+
+organizationName := "UpStart Commerce"
+organization := "org.upstartcommerce"
 
 // enable after SemVerPlugin supports sbt-plugins
 //enablePlugins(SemVerPlugin)
 semVerLimit := "1.0.999"
 licenses := Seq("MIT" -> url("http://opensource.org/licenses/MIT"))
 
-bintrayOrganization := Some("rallyhealth")
-bintrayRepository := "sbt-plugins"
+//bintrayOrganization := Some("rallyhealth")
+//bintrayRepository := "sbt-plugins"
+bintrayOrganization := Some("upstartcommerce")
+bintrayRepository := "generic"
 
 // SbtPlugin requires sbt 1.2.0+
 // See: https://developer.lightbend.com/blog/2018-07-02-sbt-1-2-0/#sbtplugin-for-plugin-development
